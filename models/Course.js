@@ -1,13 +1,18 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+const slugify = require('slugify');
 const Schema = mongoose.Schema;
 
 const CourseSchema = new mongoose.Schema({
   name: { type: String, enique: true, required: true },
   description: { type: String, required: true, trim: true },
   createdAt: { type: Date, default: Date.now },
+  slug: { type: String, unique: true },
 });
-CourseSchema.plugin(uniqueValidator);
+
+CourseSchema.pre('validate', function (next) {
+  this.slug = slugify(this.name, { lower: true, strict: true });
+  next();
+});
 
 const Course = mongoose.model('Course', CourseSchema);
 
