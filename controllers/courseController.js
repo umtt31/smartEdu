@@ -1,11 +1,24 @@
+const Category = require('../models/Category');
 const Course = require('../models/Course');
 
 exports.getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find({}).sort('-createdAt');
-    res.status(200).render('courses', { courses, page_name: 'courses' }); //.json({ status: 'success', courses });
+    const categorySlug = req.query.category;
+
+    let filter = {};
+
+    if (categorySlug) {
+      const category = await Category.findOne({ slug: categorySlug });
+      filter = { category: category._id };
+    }
+
+    const courses = await Course.find(filter).sort('-createdAt');
+    const categories = await Category.find({}).sort('name');
+    res
+      .status(200)
+      .render('courses', { courses, categories, page_name: 'courses' }); //.json({ status: 'success', courses });
   } catch (error) {
-    res.status(400).json({ status: 'status', error });
+    res.status(400).json({ status: 'fail', error });
   }
 };
 
