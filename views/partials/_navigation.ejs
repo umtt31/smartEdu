@@ -29,7 +29,7 @@
           <li class="nav-item <%= page_name === 'courses' && 'active' %>">
             <a class="nav-link" href="/courses">Courses</a>
           </li>
-          <% if (!userIN) { %>
+          <% if (!userIn) { %>
 
           <li class="nav-item <%= page_name === 'dashboard' && 'active' %>">
             <a class="nav-link" href="/dashboard">Dashboard</a>
@@ -40,7 +40,7 @@
             <a class="nav-link" href="/contact">Contact</a>
           </li>
         </ul>
-        <% if (!userIN) { %>
+        <% if (!userIn) { %>
         <ul class="nav navbar-nav navbar-right">
           <li>
             <a
@@ -62,7 +62,7 @@
           <li>
             <a
               class="hover-btn-new log mr-2 <%= page_name === 'login' || 'orange' %>"
-              href="/login"
+              href="/users/logout"
               ><span><i class="fa fa-sign-out" aria-hidden="true"></i></span
             ></a>
           </li>

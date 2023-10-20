@@ -29,3 +29,9 @@ exports.loginUser = async (req, res) => {
     res.status(400).send({ status: 'fail', error });
   }
 };
+
+exports.logoutUser = (req, res) => {
+  req.session.destroy(() => {
+    res.status(200).redirect('/');
+  });
+};
