@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcyrpt = require('bcrypt');
+const session = require('express-session');
 
 exports.createUser = async (req, res) => {
   try {
@@ -18,7 +19,8 @@ exports.loginUser = async (req, res) => {
         bcyrpt.compare(password, user.password, (err, result) => {
           if (result) {
             // USER SESSION
-            res.status(200).send('You are logged in');
+            req.session.userID = user._id;
+            res.status(200).redirect('/');
           }
         });
       }

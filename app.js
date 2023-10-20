@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
@@ -19,10 +20,17 @@ mongoose
 
 app.set('view engine', 'ejs');
 
+global.userIn = null;
+
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(session({ secret: 'secret', resave: true, saveUninitialized: true }));
 
+app.use('*', (req, res, next) => {
+  userIn = req.session.userID;
+  next();
+});
 app.use('/', pageRoute);
 app.use('/courses', courseRoute);
 app.use('/categories', categoryRoute);
