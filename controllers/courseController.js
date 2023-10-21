@@ -29,6 +29,7 @@ exports.createCourse = async (req, res) => {
       name: req.body.name,
       description: req.body.description,
       category: category._id,
+      user: req.session.userID,
     });
     res.status(201).redirect('/courses');
   } catch (error) {
@@ -38,7 +39,9 @@ exports.createCourse = async (req, res) => {
 
 exports.getCourse = async (req, res) => {
   try {
-    const course = await Course.find({ slug: req.params.slug });
+    const course = await Course.findOne({ slug: req.params.slug }).populate(
+      'user'
+    );
     res.status(200).render('course', { course, page_name: 'courses' });
   } catch (error) {
     res.status(400).json({ status: 'fail', error });
