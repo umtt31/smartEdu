@@ -24,8 +24,13 @@ exports.getAllCourses = async (req, res) => {
 
 exports.createCourse = async (req, res) => {
   try {
-    const course = await Course.create(req.body);
-    res.status(201).json({ status: 'success', course });
+    const category = await Category.findOne({ name: req.body.category });
+    const course = await Course.create({
+      name: req.body.name,
+      description: req.body.description,
+      category: category._id,
+    });
+    res.status(201).redirect('/courses');
   } catch (error) {
     res.status(400).json({ status: 'fail', error });
   }

@@ -1,11 +1,12 @@
-const User = require('../models/User');
 const bcyrpt = require('bcrypt');
-const session = require('express-session');
+const Category = require('../models/Category');
+const User = require('../models/User');
 
 exports.createUser = async (req, res) => {
   try {
-    const user = User.create(req.body);
-    res.status(201).render('/login', { user, page_name: 'login' });
+    const user = await User.create(req.body);
+    console.log(req.body);
+    res.status(201).redirect('/login');
   } catch (error) {
     res.status(400).json({ status: 'fail', error });
   }
@@ -36,10 +37,12 @@ exports.logoutUser = (req, res) => {
   });
 };
 
-exports.getDashboardPage = (req, res) => {
-  const user = User.findOne({ _id: req.session.userID });
+exports.getDashboardPage = async (req, res) => {
+  const user = await User.findOne({ _id: req.session.userID });
+  const categories = await Category.find();
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     user,
+    categories,
   });
 };
