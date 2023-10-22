@@ -14,8 +14,11 @@ const UserSchema = new Schema({
   courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
 });
 
-UserSchema.pre('validate', function (next) {
+UserSchema.pre('save', function (next) {
   const user = this;
+  if (!user.isModified('password')) {
+    next();
+  }
   bcrypt.hash(user.password, 10, (err, hash) => {
     user.password = hash;
     next();
